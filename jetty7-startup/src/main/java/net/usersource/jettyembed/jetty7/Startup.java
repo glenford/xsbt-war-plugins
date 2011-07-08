@@ -83,7 +83,12 @@ public class Startup {
             System.out.println("Max Idle Time : " + maxIdleTime );
             System.out.println("SSL Port : " + (usingSSL ? jettySSLPort : "(disabled)") );
             if(usingSSL) {
-                System.out.println("SSL Key Password : " + keyPassword );
+                if( keyPassword != null && keyPassword.length() > 0 ) {
+                   System.out.println("SSL Key Password : (supplied)" );
+                }
+                else {
+                   System.out.println("SSL Key Password : (not supplied)" );
+                }
                 System.out.println("SSL Key File Name : " + keyFileName );
             }
             System.out.println("=================");
