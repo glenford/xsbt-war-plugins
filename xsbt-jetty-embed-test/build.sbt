@@ -2,8 +2,6 @@ name := "xsbt-jetty-embed-test"
 
 version := "0.1"
 
-logLevel := Level.Debug
-
 //jettyVersion := "7.3.0.v20110203"
 
 libraryDependencies ++= Seq(
