@@ -31,10 +31,10 @@ Build the plugins
 Build the test applications
 
 	$ cd xsbt-jetty-embed-test
-        $ cp ../xsbt-war/target/scala-2.8.1.final/xsbt-war-plugin_2.8.1-0.1.jar project/plugins/lib
-        $ cp ../xsbt-jetty-embed/target/scala-2.8.1.final/xsbt-jetty-embed_2.8.1-0.1.jar project/plugins/lib
-        $ xsbt embed-jetty
-        $ java -jar target/scala-2.8.1.final/xsbt-jetty-embed-test_2.8.1-0.1-jettyEmbed.war 
+	$ cp ../xsbt-war/target/scala-2.8.1.final/xsbt-war-plugin_2.8.1-0.1.jar project/plugins/lib
+	$ cp ../xsbt-jetty-embed/target/scala-2.8.1.final/xsbt-jetty-embed_2.8.1-0.1.jar project/plugins/lib
+	$ xsbt embed-jetty
+	$ java -jar target/scala-2.8.1.final/xsbt-jetty-embed-test_2.8.1-0.1-jettyEmbed.war 
 	2011-07-12 13:00:02.269::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
 	2011-07-12 13:00:02.270::INFO:  jetty-6.1.x
 	2011-07-12 13:00:02.378::INFO:  Extract file:/data/home/glefor/UserSource/xsbt-jetty-embed-test/target/scala-2.8.1.final/xsbt-jetty-embed-test_2.8.1-0.1-jettyEmbed.war to /tmp/Jetty_0_0_0_0_8080_xsbt.jetty.embed.test_2.8.1.0.1.jettyEmbed.war____7mm45i/webapp
