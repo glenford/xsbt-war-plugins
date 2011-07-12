@@ -10,7 +10,7 @@ as to structuring and implementation.
 
 Please see the Wiki for usage information:
 
-    https://github.com/glenford/xsbt-war-plugins/wiki/xsbt-war-plugins
+[[https://github.com/glenford/xsbt-war-plugins/wiki/xsbt-war-plugins]]
 
 
 License
