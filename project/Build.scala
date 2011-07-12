@@ -78,16 +78,14 @@ object XsbtWarPluginsBuild extends Build {
     )
   ) dependsOn(war)
 
-  private def copyClassFiles(base: File):Seq[File] = {
-    val jetty6class = new File("jetty6-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty6/Startup.class")
-    val jetty6file = base / "startup"/ "net" / "usersource" / "jettyembed" / "jetty6" / "Startup.class.precompiled"
-    IO.copyFile(jetty6class,jetty6file)
+  private def copyClassFiles(base: File):Seq[(File,String)] = {
+    val jetty6class = "jetty6-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty6/Startup.class"
+    val jetty6 = (new File(jetty6class), "startup/net/usersource/jettyembed/jetty6/Startup.class.precompiled")
 
-    val jetty7class =  new File("jetty7-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty7/Startup.class")
-    val jetty7file = base / "startup"/ "net" / "usersource" / "jettyembed" / "jetty7" / "Startup.class.precompiled"
-    IO.copyFile(jetty7class,jetty7file)
+    val jetty7class =  "jetty7-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty7/Startup.class"
+    val jetty7 = (new File(jetty7class), "startup/net/usersource/jettyembed/jetty7/Startup.class.precompiled")
 
-    Seq(jetty6file,jetty7file)
+    Seq(jetty6,jetty7)
   }
 
   lazy val jettyEmbed = Project("jetty-embed", file("xsbt-jetty-embed"), 
@@ -95,7 +93,7 @@ object XsbtWarPluginsBuild extends Build {
       name := "xsbt-jetty-embed",
       sbtPlugin := true,
       libraryDependencies ++= commonDependencies,
-      (resourceGenerators in Compile) <++= ((resourceManaged in Compile) map { dir => copyClassFiles( dir ) }) map { x => Seq( x ) }
+      (mappings in packageBin in Compile) <++= ((resourceManaged in Compile) map { dir => copyClassFiles( dir ) }) map { x => x }
     )
   ) dependsOn(war,jetty6Startup,jetty7Startup)
 
