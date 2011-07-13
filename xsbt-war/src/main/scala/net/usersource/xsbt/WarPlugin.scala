@@ -7,6 +7,11 @@ import sbt.Keys._
 import sbt.Defaults._
 import sbt.Project.Initialize
 
+//
+// This plugin is Based upon the great work of siasia => https://github.com/siasia/xsbt-web-plugin.git
+// I hope to refactor this at some point to be based on that plugin rather than duplicate its functions
+//
+
 object WarPlugin extends Plugin {
 
   override lazy val settings = warSettings ++ super.settings
