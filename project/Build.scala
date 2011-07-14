@@ -3,7 +3,7 @@ import sbt._, Keys._
 
 object BuildSettings {
   val buildOrganization = "net.usersource"
-  val buildVersion      = "0.1"
+  val buildVersion      = "0.2"
   val buildScalaVersion = "2.8.1"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
@@ -31,6 +31,9 @@ object Dependencies {
   val jetty7Version = "7.3.0.v20110203"
   val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % jetty7Version % "optional"
 
+  val jetty8Version = "8.0.0.M3"
+  val jetty8 = "org.eclipse.jetty" % "jetty-webapp" % jetty8Version % "optional"
+
   val jersyVersion = "1.3"
   val jerseyServer    = "com.sun.jersey" % "jersey-server" % jersyVersion % "optional"
   val jerseyCore      = "com.sun.jersey" % "jersey-core" % jersyVersion % "optional"
@@ -54,6 +57,10 @@ object XsbtWarPluginsBuild extends Build {
 
   val jetty7embedDependencies = Seq(
     jetty7
+  )
+
+  val jetty8embedDependencies = Seq(
+    jetty8
   )
 
   val jerseyDependencies = Seq(
@@ -84,7 +91,7 @@ object XsbtWarPluginsBuild extends Build {
 
     val jetty7class =  "jetty7-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty7/Startup.class"
     val jetty7 = (new File(jetty7class), "startup/net/usersource/jettyembed/jetty7/Startup.class.precompiled")
-
+   
     Seq(jetty6,jetty7)
   }
 

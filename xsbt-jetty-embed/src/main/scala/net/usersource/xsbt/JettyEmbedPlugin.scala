@@ -86,7 +86,7 @@ object JettyEmbedPlugin extends Plugin {
       (version) => {
         version match {
           case v: String if v.startsWith("6") => Some(jetty6DefaultStartupClass)
-          case v: String if v.startsWith("7") => Some(jetty7DefaultStartupClass)
+          case v: String if(v.startsWith("7") || v.startsWith("8")) => Some(jetty7DefaultStartupClass)
           case _ => None
         }
       }
@@ -100,7 +100,7 @@ object JettyEmbedPlugin extends Plugin {
         val jetty6EmbedSSLDependencies = "org.mortbay.jetty" % "jetty-sslengine" % v % "jettyEmbed"
         Seq(jetty6EmbedDependencies, jetty6EmbedSSLDependencies)
       }
-      case v: String if v.startsWith("7") => {
+      case v: String if(v.startsWith("7") || v.startsWith("8")) => {
         val jetty7EmbedDependencies = "org.eclipse.jetty" % "jetty-webapp" % v % "jettyEmbed"
         Seq(jetty7EmbedDependencies)
       }
@@ -109,7 +109,7 @@ object JettyEmbedPlugin extends Plugin {
 
  override lazy val settings = super.settings ++ jettyEmbedSettings
 
-lazy val jettyEmbedSettings: Seq[Project.Setting[_]] = {
+ lazy val jettyEmbedSettings: Seq[Project.Setting[_]] = {
     Seq(
       jettyVersion := "6.1.21",
       jettyEmbeddedStartup <<= determineStartup,
