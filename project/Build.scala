@@ -14,10 +14,11 @@ object BuildSettings {
 }
 
 object Resolvers {
-  val javaDotNetRepo = "Glassfish Repo" at "http://download.java.net/maven/glassfish/"
+  val apacheTomcatRepo = "Tomcat Repo" at "http://tomcat.apache.org/dev/dist/m2-repository"
 }
 
 object Dependencies {
+
   val sbtVersion      = "0.10.0"
   val sbtIo           = "org.scala-tools.sbt" %% "io" % sbtVersion
   val sbtLogging      = "org.scala-tools.sbt" %% "logging" % sbtVersion
@@ -34,12 +35,17 @@ object Dependencies {
   val jetty8Version = "8.0.0.M3"
   val jetty8 = "org.eclipse.jetty" % "jetty-webapp" % jetty8Version % "optional"
 
+  val tomcat7Version = "7.0.2"
+  val tomcat7 = "org.apache.tomcat" % "tomcat-catalina" % tomcat7Version % "optional"
+  val tomcat7embed = "org.apache.tomcat.embed" % "tomcat-embed-core" % tomcat7Version % "optional"
+
   val jersyVersion = "1.3"
   val jerseyServer    = "com.sun.jersey" % "jersey-server" % jersyVersion % "optional"
   val jerseyCore      = "com.sun.jersey" % "jersey-core" % jersyVersion % "optional"
 }
 
 object XsbtWarPluginsBuild extends Build {
+  import Resolvers._
   import Dependencies._
   import BuildSettings._
 
@@ -61,6 +67,11 @@ object XsbtWarPluginsBuild extends Build {
 
   val jetty8embedDependencies = Seq(
     jetty8
+  )
+
+  val tomcat7embedDependencies = Seq(
+    tomcat7,
+    tomcat7embed
   )
 
   val jerseyDependencies = Seq(
@@ -102,7 +113,7 @@ object XsbtWarPluginsBuild extends Build {
       libraryDependencies ++= commonDependencies,
       (mappings in packageBin in Compile) <++= ((resourceManaged in Compile) map { dir => copyClassFiles( dir ) }) map { x => x }
     )
-  ) dependsOn(war,jetty6Startup,jetty7Startup)
+  ) dependsOn(war,jetty6Startup,jetty7Startup,tomcat7Startup)
 
   lazy val jetty6Startup = Project("jetty6-startup", file("jetty6-startup"),
     settings = buildSettings ++ Seq(
@@ -118,5 +129,13 @@ object XsbtWarPluginsBuild extends Build {
     )
   )
 
-  override def projects = Seq(root, war, warExample, jetty6Startup, jetty7Startup, jettyEmbed)
+  lazy val tomcat7Startup = Project("tomcat7-startup", file("tomcat7-startup"),
+    settings = buildSettings ++ Seq(
+      name := "tomcat7-startup",
+      libraryDependencies ++= tomcat7embedDependencies,
+      resolvers += apacheTomcatRepo
+    )
+  )
+
+  override def projects = Seq(root, war, warExample, jetty6Startup, jetty7Startup, tomcat7Startup, jettyEmbed)
 }
