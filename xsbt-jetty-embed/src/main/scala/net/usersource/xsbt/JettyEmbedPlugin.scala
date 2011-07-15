@@ -40,7 +40,9 @@ object JettyEmbedPlugin extends Plugin {
     }
     else {
       log.debug("Startup class not found, unpacking precompiled version")
-      val files = IO.unzip(new File("project/plugins/lib/xsbt-jetty-embed_2.8.1-0.1.jar"), classDir, filter = (s: String) => s.endsWith(fileName + ".precompiled") )
+      val pluginJar = new File("project/plugins/lib/xsbt-jetty-embed_2.8.1-0.2.jar")
+      log.debug("Using plugin JAR [" + pluginJar.absolutePath + "]")
+      val files = IO.unzip(pluginJar, classDir, filter = (s: String) => s.endsWith(fileName + ".precompiled") )
       
       log.debug("Unpacked [" + files.head.getAbsolutePath + "]" )
       IO.move(files.head ,classDir / fileName)

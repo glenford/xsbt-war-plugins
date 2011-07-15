@@ -19,7 +19,7 @@ object Resolvers {
 
 object Dependencies {
 
-  val sbtVersion      = "0.10.0"
+  val sbtVersion      = "0.10.1"
   val sbtIo           = "org.scala-tools.sbt" %% "io" % sbtVersion
   val sbtLogging      = "org.scala-tools.sbt" %% "logging" % sbtVersion
   val sbtClasspath    = "org.scala-tools.sbt" %% "classpath" % sbtVersion
