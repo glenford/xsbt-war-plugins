@@ -102,8 +102,11 @@ object XsbtWarPluginsBuild extends Build {
 
     val jetty7class =  "jetty7-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty7/Startup.class"
     val jetty7 = (new File(jetty7class), "startup/net/usersource/jettyembed/jetty7/Startup.class.precompiled")
-   
-    Seq(jetty6,jetty7)
+
+    val tomcat7class = "tomcat7-startup/target/scala-2.8.1.final/classes/net/usersource/tomcatembed/tomcat7/Startup.class"
+    val tomcat7 = (new File(tomcat7class), "startup/net/usersource/tomcatembed/tomcat7/Startup.class.precompiled")
+
+    Seq(jetty6,jetty7,tomcat7)
   }
 
   lazy val jettyEmbed = Project("jetty-embed", file("xsbt-jetty-embed"), 

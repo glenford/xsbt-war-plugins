@@ -49,7 +49,7 @@ public class Startup {
     public static void main(String[] args) throws Exception {
         processOptions();
 
-        String appBase = args[0];
+        String appBase = Startup.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(httpPort);
