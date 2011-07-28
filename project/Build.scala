@@ -1,9 +1,10 @@
-import collection.Seq
-import sbt._, Keys._
+
+import sbt._
+import sbt.Keys._
 
 object BuildSettings {
   val buildOrganization = "net.usersource"
-  val buildVersion      = "0.2"
+  val buildVersion      = "0.3"
   val buildScalaVersion = "2.8.1"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
@@ -15,6 +16,7 @@ object BuildSettings {
 
 object Resolvers {
   val apacheTomcatRepo = "Tomcat Repo" at "http://tomcat.apache.org/dev/dist/m2-repository"
+  val webPlugin = "Web plugin repo" at "http://siasia.github.com/maven2"
 }
 
 object Dependencies {
@@ -79,23 +81,8 @@ object XsbtWarPluginsBuild extends Build {
     jerseyCore
   )
 
-  lazy val root = Project("xsbt-war-plugins", file(".") ) aggregate( war, warExample, jettyEmbed ) 
-    
-  lazy val war = Project("xsbt-war", file("xsbt-war"),
-    settings = buildSettings ++ Seq(
-      name := "xsbt-war-plugin",
-      sbtPlugin := true,
-      libraryDependencies ++= commonDependencies
-    )
-  )
-
-  lazy val warExample = Project("xsbt-war-example", file("xsbt-war-example"),
-    settings = buildSettings ++ Seq(
-      name := "xsbt-war-example",
-      libraryDependencies ++= jerseyDependencies
-    )
-  ) dependsOn(war)
-
+  lazy val root = Project("xsbt-war-plugins", file(".") ) aggregate( jettyEmbed ) 
+ 
   private def copyClassFiles(base: File):Seq[(File,String)] = {
     val jetty6class = "jetty6-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty6/Startup.class"
     val jetty6 = (new File(jetty6class), "startup/net/usersource/jettyembed/jetty6/Startup.class.precompiled")
@@ -113,10 +100,12 @@ object XsbtWarPluginsBuild extends Build {
     settings = buildSettings ++ Seq(
       name := "xsbt-jetty-embed",
       sbtPlugin := true,
+      resolvers += webPlugin,
+      libraryDependencies += "com.github.siasia" %% "xsbt-web-plugin" % "0.1.1-0.10.1",
       libraryDependencies ++= commonDependencies,
       (mappings in packageBin in Compile) <++= ((resourceManaged in Compile) map { dir => copyClassFiles( dir ) }) map { x => x }
     )
-  ) dependsOn(war,jetty6Startup,jetty7Startup,tomcat7Startup)
+  ) dependsOn(jetty6Startup,jetty7Startup,tomcat7Startup)
 
   lazy val jetty6Startup = Project("jetty6-startup", file("jetty6-startup"),
     settings = buildSettings ++ Seq(
@@ -140,5 +129,6 @@ object XsbtWarPluginsBuild extends Build {
     )
   )
 
-  override def projects = Seq(root, war, warExample, jetty6Startup, jetty7Startup, tomcat7Startup, jettyEmbed)
+  override def projects = Seq(root, jetty6Startup, jetty7Startup, tomcat7Startup, jettyEmbed)
+
 }

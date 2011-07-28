@@ -1,3 +1,5 @@
+seq(webSettings:_*)
+
 name := "xsbt-jetty-embed-test"
 
 version := "0.1"
@@ -8,3 +10,5 @@ libraryDependencies ++= Seq(
   "com.sun.jersey" % "jersey-server" % "1.3",
   "com.sun.jersey" % "jersey-core" % "1.3"
 )
+
+

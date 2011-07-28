@@ -6,6 +6,7 @@ import sbt.Keys._
 import sbt.Defaults._
 import sbt.Project.Initialize
 
+
 import sbt.File
 
 
@@ -22,7 +23,8 @@ object TomcatEmbedPlugin extends Plugin {
 
   val tomcatEmbeddedClasspath = TaskKey[Seq[ModuleID]]("embed-tomcat-classpath")
 
-  val prepareWar = TaskKey[Seq[(File, String)]]("prepare-war")
+  // these are set by the xsbt-web plugin (https://github.com/siasia/xsbt-web-plugin)
+  val prepareWar = TaskKey[Seq[(File, String)]]("prepare-webapp")
   val temporaryWarPath = SettingKey[File]("temporary-war-path")
 
   def embedTomcatTask:  Initialize[Task[Seq[(File, String)]]] = embedTomcatPrepare map { (e) => e }
@@ -36,7 +38,7 @@ object TomcatEmbedPlugin extends Plugin {
     }
     else {
       log.debug("Startup class not found, unpacking precompiled version")
-      val pluginJar = new File("project/plugins/lib/xsbt-jetty-embed_2.8.1-0.2.jar")
+      val pluginJar = new File("project/plugins/lib/xsbt-jetty-embed_2.8.1-0.3.jar")
       log.debug("Using plugin JAR [" + pluginJar.absolutePath + "]")
       val files = IO.unzip(pluginJar, classDir, filter = (s: String) => s.endsWith(fileName + ".precompiled") )
 
@@ -139,8 +141,8 @@ object JettyEmbedPlugin extends Plugin {
 
   val jettyEmbeddedClasspath = TaskKey[Seq[ModuleID]]("embed-jetty-classpath")
 
-  // these are set by the xsbt-war plugin
-  val prepareWar = TaskKey[Seq[(File, String)]]("prepare-war")
+  // these are set by the xsbt-web plugin (https://github.com/siasia/xsbt-web-plugin)
+  val prepareWar = TaskKey[Seq[(File, String)]]("prepare-webapp")
   val temporaryWarPath = SettingKey[File]("temporary-war-path")
 
   def embedJettyTask:  Initialize[Task[Seq[(File, String)]]] = embedJettyPrepare map { (e) => e }
@@ -154,7 +156,7 @@ object JettyEmbedPlugin extends Plugin {
     }
     else {
       log.debug("Startup class not found, unpacking precompiled version")
-      val pluginJar = new File("project/plugins/lib/xsbt-jetty-embed_2.8.1-0.2.jar")
+      val pluginJar = new File("project/plugins/lib/xsbt-jetty-embed_2.8.1-0.3.jar")
       log.debug("Using plugin JAR [" + pluginJar.absolutePath + "]")
       val files = IO.unzip(pluginJar, classDir, filter = (s: String) => s.endsWith(fileName + ".precompiled") )
       
