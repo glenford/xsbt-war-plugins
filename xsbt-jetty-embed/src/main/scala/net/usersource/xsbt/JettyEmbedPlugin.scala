@@ -14,6 +14,7 @@ trait EmbedPlugin extends Plugin {
   // these are set by the xsbt-web plugin (https://github.com/siasia/xsbt-web-plugin)
   val prepareWar = TaskKey[Seq[(File, String)]]("prepare-webapp")
   val temporaryWarPath = SettingKey[File]("temporary-war-path")
+  val packageWar = TaskKey[File]("package-war")
 
   def prepareStartupClass( classDir: File, className: String, log :Logger ): Option[(File,String)] = {
     val fileName = className.replace('.','/') + ".class"
@@ -123,7 +124,7 @@ object TomcatEmbedPlugin extends EmbedPlugin {
     ) ++ packageTasks(embedTomcat,embedTomcatTask)
   }
 
-  override lazy val settings = super.settings ++ tomcatEmbedSettings
+  //override lazy val settings = super.settings ++ tomcatEmbedSettings
 }
 
 
@@ -192,6 +193,6 @@ object JettyEmbedPlugin extends EmbedPlugin {
     ) ++ packageTasks(embedJetty,embedJettyTask)
   }
 
-  override lazy val settings = super.settings ++ jettyEmbedSettings
+  //override lazy val settings = super.settings ++ jettyEmbedSettings
 }
 
