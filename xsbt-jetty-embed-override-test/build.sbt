@@ -1,3 +1,5 @@
+seq(webSettings:_*)
+
 name := "xsbt-jetty-embed-override-test"
 
 version := "0.1"
