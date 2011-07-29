@@ -81,7 +81,6 @@ object XsbtWarPluginsBuild extends Build {
     jerseyCore
   )
 
-  lazy val root = Project("xsbt-war-plugins", file(".") ) aggregate( jettyEmbed ) 
  
   private def copyClassFiles(base: File):Seq[(File,String)] = {
     val jetty6class = "jetty6-startup/target/scala-2.8.1.final/classes/net/usersource/jettyembed/jetty6/Startup.class"
@@ -129,6 +128,6 @@ object XsbtWarPluginsBuild extends Build {
     )
   )
 
-  override def projects = Seq(root, jetty6Startup, jetty7Startup, tomcat7Startup, jettyEmbed)
+  override def projects = Seq(jettyEmbed, jetty6Startup, jetty7Startup, tomcat7Startup)
 
 }
