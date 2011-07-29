@@ -62,6 +62,20 @@ trait EmbedPlugin extends Plugin {
       case None => handleNoStartup(startup, log)
     }
   }
+
+  def embedInScript( embededWarPath: File, slog: Logger): File = {
+    slog.debug("Producing self executing file from [" + embededWarPath.absolutePath + "]" )
+    val newFileName = embededWarPath.absolutePath.replace(".war","")
+    val cmds = Seq(
+      "/bin/bash echo -e '#!/bin/sh\\n\\nexec java -jar $0 \"${@}\"\\n\\n\\n\\n' > " + newFileName,
+      "/bin/bash cat " + embededWarPath.absolutePath + " >> " + newFileName,
+      "/bin/bash chmod +x " + newFileName
+    )
+    Process.stringSeqToProcess(cmds) !
+    
+    new File(newFileName)
+  }
+
 }
 
 
@@ -124,9 +138,7 @@ object TomcatEmbedPlugin extends EmbedPlugin {
     ) ++ packageTasks(embedTomcat,embedTomcatTask)
   }
 
-  //override lazy val settings = super.settings ++ tomcatEmbedSettings
 }
-
 
 object JettyEmbedPlugin extends EmbedPlugin {
 
@@ -135,6 +147,7 @@ object JettyEmbedPlugin extends EmbedPlugin {
   val jetty7DefaultStartupClass = "net.usersource.jettyembed.jetty7.Startup"
   val embedJettyPrepare = TaskKey[Seq[(File,String)]]("embed-jetty-prepare")
   val embedJetty = TaskKey[File]("embed-jetty", "embed jetty to produce an executeable war")
+  val embedJettyAndScript = TaskKey[File]("embed-jetty-script", "embed jetty and produce self executing war")
   val jettyVersion = SettingKey[String]("embed-jetty-version")
   val jettyEmbeddedStartup = TaskKey[Option[String]]("embed-jetty-startup")
   val jettyEmbeddedClasspath = TaskKey[Seq[ModuleID]]("embed-jetty-classpath")
@@ -174,6 +187,7 @@ object JettyEmbedPlugin extends EmbedPlugin {
     }
   }
 
+
   lazy val jettyEmbedSettings: Seq[Project.Setting[_]] = {
     Seq(
       jettyVersion := "6.1.21",
@@ -189,10 +203,10 @@ object JettyEmbedPlugin extends EmbedPlugin {
       embedJettyPrepare <<= embedJettyPrepare dependsOn(prepareWar),
       packageOptions in embedJetty <<= jettyEmbeddedStartup map { main: Option[String] => Seq(Package.MainClass(main.get)) },
       artifact in embedJetty <<= name(n => Artifact(n, "war", "war")),
-      libraryDependencies <++= jettyVersion.apply(determineClasspath(_))
+      libraryDependencies <++= jettyVersion.apply(determineClasspath(_)),
+      embedJettyAndScript <<= (embedJetty, streams) map { (path:File, s) => embedInScript(path,s.log) }
     ) ++ packageTasks(embedJetty,embedJettyTask)
   }
 
-  //override lazy val settings = super.settings ++ jettyEmbedSettings
 }
 
