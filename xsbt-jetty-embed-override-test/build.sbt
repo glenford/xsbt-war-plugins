@@ -14,3 +14,6 @@ libraryDependencies ++= Seq(
   "org.mortbay.jetty" % "jetty" % "6.1.21",
   "org.mortbay.jetty" % "jetty-sslengine" % "6.1.21"
 )
+
+resolvers += "Java dot Net Repo" at "http://download.java.net/maven/2/"
+

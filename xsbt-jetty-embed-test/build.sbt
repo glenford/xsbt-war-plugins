@@ -13,4 +13,6 @@ libraryDependencies ++= Seq(
   "com.sun.jersey" % "jersey-core" % "1.3"
 )
 
+resolvers += "Java dot Net Repo" at "http://download.java.net/maven/2/"
+
 
