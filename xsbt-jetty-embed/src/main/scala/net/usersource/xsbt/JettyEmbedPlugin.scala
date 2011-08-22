@@ -48,7 +48,7 @@ trait EmbedPlugin extends Plugin {
     log.debug("Embedding dependencies [" + deps + "]")
     deps.foreach { (dep) => {
       log.debug("Unpacking [" + dep + "] to [" + warPath / dep.name + "]")
-      val filter: NameFilter = (s: String) => !s.endsWith(".MF")
+      val filter: NameFilter = (s: String) => !s.endsWith(".MF") && !s.endsWith(".SF") && !s.endsWith(".DSA")
       IO.unzip(dep,warPath,filter)
     } }
 
